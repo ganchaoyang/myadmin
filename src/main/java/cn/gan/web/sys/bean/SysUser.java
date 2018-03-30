@@ -1,5 +1,7 @@
 package cn.gan.web.sys.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -42,6 +44,7 @@ public class SysUser implements Serializable{
         this.loginName = loginName;
     }
 
+    @JsonIgnore
     public String getPassword() {
         return password;
     }

@@ -6,6 +6,8 @@ import cn.gan.web.sys.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service(value = "sysUserService")
 public class SysUserServiceImpl implements SysUserService {
 
@@ -18,7 +20,12 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     @Override
-    public SysUser fetchByLoginName(String loginName) {
+    public SysUser findByLoginName(String loginName) {
         return sysUserMapper.findByLoginName(loginName);
+    }
+
+    @Override
+    public List<SysUser> findAll() {
+        return sysUserMapper.findAll();
     }
 }
