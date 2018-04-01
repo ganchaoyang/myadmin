@@ -4,15 +4,15 @@ import cn.gan.web.sys.bean.Result;
 import cn.gan.web.sys.bean.SysUser;
 import cn.gan.web.sys.service.SysUserService;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.annotation.JSONCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,13 +30,23 @@ public class SysUserController {
 
     // 用户登录。
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public Result<Map<String, Object>> login(String username, String password){
+    public Result<Map<String, Object>> login(@RequestBody Map<String,Object> reqMap){
+        String username = (String) reqMap.get("username"), password = (String) reqMap.get("password");
         logger.debug("user login username : {} , password : {}", username, password);
         SysUser sysUser = sysUserService.findByLoginName(username);
-        if (null != sysUser){
-            logger.debug("select result is {}", JSON.toJSONString(sysUser));
-        }
         Map<String, Object> data = new HashMap<String, Object>();
+        logger.debug("user:{}", JSON.toJSONString(sysUser));
+        if (sysUser == null){
+            data.put("err_msg", "用户名或密码错误");
+            return Result.error(data);
+        }
+        try{
+            SecurityUtils.getSubject().login(new UsernamePasswordToken(username,
+                    new Sha256Hash(password, sysUser.getSalt()).toHex()));
+        }catch (UnknownAccountException | IncorrectCredentialsException e){
+            data.put("err_msg", "用户名或密码错误");
+            return Result.error(data);
+        }
         data.put("token", "admin");
         List<String> roles = new ArrayList<String>();
         roles.add("admin");
