@@ -65,4 +65,10 @@ public class SysUserController {
         return Result.success(users);
     }
 
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    public Result<String> add(@RequestBody SysUser sysUser){
+        logger.debug("create user : {}", JSON.toJSONString(sysUser));
+        return Result.success("成功!");
+    }
+
 }

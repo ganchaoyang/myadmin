@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class SysUser implements Serializable{
     private String id;
@@ -16,7 +17,7 @@ public class SysUser implements Serializable{
 
     private String nickname;
 
-    private Integer isDisabled;
+    private boolean isDisabled;
 
     private String email;
 
@@ -26,7 +27,11 @@ public class SysUser implements Serializable{
 
     private Date updateTime;
 
+    private String unitId;
+
     private String opBy;
+
+    private List<SysRole> roles;
 
     public String getId() {
         return id;
@@ -69,12 +74,12 @@ public class SysUser implements Serializable{
         this.nickname = nickname;
     }
 
-    public Integer getIsDisabled() {
+    public boolean isDisabled() {
         return isDisabled;
     }
 
-    public void setIsDisabled(Integer isDisabled) {
-        this.isDisabled = isDisabled;
+    public void setDisabled(boolean disabled) {
+        isDisabled = disabled;
     }
 
     public String getEmail() {
@@ -115,5 +120,21 @@ public class SysUser implements Serializable{
 
     public void setOpBy(String opBy) {
         this.opBy = opBy;
+    }
+
+    public String getUnitId() {
+        return unitId;
+    }
+
+    public void setUnitId(String unitId) {
+        this.unitId = unitId;
+    }
+
+    public List<SysRole> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<SysRole> roles) {
+        this.roles = roles;
     }
 }
