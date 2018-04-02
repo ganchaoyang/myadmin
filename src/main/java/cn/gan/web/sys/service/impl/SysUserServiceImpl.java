@@ -3,10 +3,13 @@ package cn.gan.web.sys.service.impl;
 import cn.gan.web.sys.bean.SysUser;
 import cn.gan.web.sys.bean.mapper.SysUserMapper;
 import cn.gan.web.sys.service.SysUserService;
+import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service(value = "sysUserService")
 public class SysUserServiceImpl implements SysUserService {
@@ -15,8 +18,15 @@ public class SysUserServiceImpl implements SysUserService {
     private SysUserMapper sysUserMapper;
 
     @Override
-    public int addUser(SysUser sysUser) {
-        return 0;
+    public void addUser(SysUser sysUser) {
+        sysUser.setSalt(UUID.randomUUID().toString().replace("-", ""));
+        sysUser.setPassword((new Sha256Hash(sysUser.getPassword(), sysUser.getSalt())).toHex());
+        sysUser.setUpdateTime(new Date());
+        sysUser.setCreateTime(new Date());
+        // 首先是插入用户。
+        sysUserMapper.insert(sysUser);
+        if (sysUser.getRoles() != null && !sysUser.getRoles().isEmpty())
+            sysUserMapper.addRoles(sysUser, sysUser.getRoles());
     }
 
     @Override

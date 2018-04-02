@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface SysUserService {
 
-    int addUser(SysUser sysUser);
+    void addUser(SysUser sysUser);
 
     /**
      * 根据登录名称查找用户。

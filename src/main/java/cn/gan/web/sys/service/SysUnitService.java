@@ -14,4 +14,12 @@ public interface SysUnitService {
      */
     List<SysUnit> findAll(boolean tree);
 
+
+    /**
+     * 根据id该记录是否存在。
+     * @param id
+     * @return
+     */
+    boolean isExistById(String id);
+
 }

@@ -12,4 +12,7 @@ public interface SysUnitMapper {
     @Select("select * from sys_unit")
     List<SysUnit> findAll();
 
+    @Select("select count(id) from sys_unit where id = #{id}")
+    int count(String id);
+
 }

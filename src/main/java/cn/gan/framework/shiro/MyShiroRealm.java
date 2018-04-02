@@ -2,6 +2,7 @@ package cn.gan.framework.shiro;
 
 import cn.gan.web.sys.bean.SysUser;
 import cn.gan.web.sys.service.SysUserService;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -34,10 +35,11 @@ public class MyShiroRealm extends AuthorizingRealm{
         SysUser sysUser = sysUserService.findByLoginName(username);
         if (sysUser == null)
             throw new UnknownAccountException();
-        SimpleAuthenticationInfo authenticationInfo =
-                new SimpleAuthenticationInfo(username, sysUser.getPassword(),
-                        ByteSource.Util.bytes(sysUser.getSalt()), getName());
-        return authenticationInfo;
+        SimpleAccount simpleAccount =
+                new SimpleAccount(username, sysUser.getPassword(), getName());
+        //将用户信息放入session中
+        SecurityUtils.getSubject().getSession().setAttribute("USER_INFO", sysUser);
+        return simpleAccount;
     }
 
     public static void main(String[] args) {

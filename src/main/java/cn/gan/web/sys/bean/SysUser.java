@@ -49,7 +49,6 @@ public class SysUser implements Serializable{
         this.loginName = loginName;
     }
 
-    @JsonIgnore
     public String getPassword() {
         return password;
     }

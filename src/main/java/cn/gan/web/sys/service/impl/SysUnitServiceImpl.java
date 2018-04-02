@@ -22,4 +22,12 @@ public class SysUnitServiceImpl implements SysUnitService {
         }
         return units;
     }
+
+    @Override
+    public boolean isExistById(String id) {
+        int count = sysUnitMapper.count(id);
+        if (count > 0)
+            return true;
+        return false;
+    }
 }
