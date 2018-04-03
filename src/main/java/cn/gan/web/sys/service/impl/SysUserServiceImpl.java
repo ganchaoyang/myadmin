@@ -42,4 +42,10 @@ public class SysUserServiceImpl implements SysUserService {
     public List<SysUser> findAll() {
         return sysUserMapper.findAll();
     }
+
+    @Override
+    public void deleteById(String id) {
+        sysUserMapper.deleteAllRoles(id);
+        sysUserMapper.delete(id);
+    }
 }

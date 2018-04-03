@@ -6,6 +6,7 @@ import cn.gan.web.sys.bean.provider.SysUserDaoProvider;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.FetchType;
 import org.apache.ibatis.mapping.StatementType;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -42,4 +43,7 @@ public interface SysUserMapper {
 
     @InsertProvider(type = SysUserDaoProvider.class, method = "addRoles")
     int addRoles(@Param("user") SysUser sysUser, @Param("roles") List<SysRole> roles);
+
+    @Delete("delete from sys_user_role where user_id = #{id}")
+    int deleteAllRoles(@Param("id") String userId);
 }

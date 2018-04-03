@@ -22,4 +22,10 @@ public interface SysUserService {
      */
     List<SysUser> findAll();
 
+    /**
+     * 根据Id删除用户。
+     * @param id
+     */
+    void deleteById(String id);
+
 }

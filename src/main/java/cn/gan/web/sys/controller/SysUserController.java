@@ -94,4 +94,12 @@ public class SysUserController {
         return Result.success("成功!");
     }
 
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+    @RequiresUser
+    public Result<String> delete(@PathVariable("id") String id){
+        logger.debug("delete user : {}", id);
+        sysUserService.deleteById(id);
+        return Result.success("删除成功。");
+    }
+
 }
