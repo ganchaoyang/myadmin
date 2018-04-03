@@ -103,9 +103,11 @@ public class SysUserController {
     public Result<String> edit(@RequestBody SysUser sysUser, HttpSession session){
         // 判断这个用户是否存在。
         logger.debug("update user : {}", JSON.toJSONString(sysUser));
-        if (sysUser.getLoginName()!=null &&
-                sysUserService.findByLoginName(sysUser.getLoginName(), false)!=null){
-            return Result.error("登录名称已存在！");
+        // 根据登录名称查询用户。
+        if (sysUser.getLoginName()!=null){
+            SysUser exist = sysUserService.findByLoginName(sysUser.getLoginName(), false);
+            if (!exist.getId().equals(sysUser.getId()))
+                return Result.error("登录名称已存在！");
         }
         sysUser.setOpBy((String) session.getAttribute("me"));
         sysUser.setUpdateTime(new Date());

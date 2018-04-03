@@ -59,6 +59,8 @@ public class SysUserServiceImpl implements SysUserService {
         if (sysUser.getPassword() != null && sysUser.getPassword().trim().length() > 0){
             sysUser.setPassword((new Sha256Hash(sysUser.getPassword(),
                     tobeUpdate.getSalt()).toHex()));
+        }else {
+            sysUser.setPassword(tobeUpdate.getPassword());
         }
         // 更新。
         return sysUserMapper.updateIgnoreNull(sysUser);
