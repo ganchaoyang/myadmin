@@ -6,7 +6,6 @@ import cn.gan.web.sys.bean.provider.SysUserDaoProvider;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.FetchType;
 import org.apache.ibatis.mapping.StatementType;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
