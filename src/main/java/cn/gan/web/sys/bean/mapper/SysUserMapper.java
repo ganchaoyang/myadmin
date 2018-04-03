@@ -13,6 +13,7 @@ import java.util.List;
 public interface SysUserMapper {
 
     @Select("select * from sys_user")
+    @ResultMap("link")
     List<SysUser> findAll();
 
     @Select("select * from sys_user where login_name = #{loginName}")
@@ -20,6 +21,10 @@ public interface SysUserMapper {
 
     @Select("select * from sys_user where login_name = #{loginName}")
     @Results(id = "link", value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "opBy", column = "op_by"),
+            @Result(property = "opUser", javaType = SysUser.class, column = "op_by",
+                    one = @One(select = "cn.gan.web.sys.bean.mapper.SysUserMapper.findById", fetchType = FetchType.EAGER)),
             @Result(property = "roles", javaType = List.class, column = "id",
                     many = @Many(select = "cn.gan.web.sys.bean.mapper.SysRoleMapper.findByUserId", fetchType = FetchType.EAGER))
     })

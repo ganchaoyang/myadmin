@@ -33,6 +33,8 @@ public class SysUser implements Serializable{
 
     private List<SysRole> roles;
 
+    private SysUser opUser;
+
     public String getId() {
         return id;
     }
@@ -135,5 +137,13 @@ public class SysUser implements Serializable{
 
     public void setRoles(List<SysRole> roles) {
         this.roles = roles;
+    }
+
+    public SysUser getOpUser() {
+        return opUser;
+    }
+
+    public void setOpUser(SysUser opUser) {
+        this.opUser = opUser;
     }
 }
