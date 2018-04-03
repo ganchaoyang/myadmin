@@ -14,7 +14,7 @@ public interface SysUserService {
      *              登录名。
      * @return
      */
-    SysUser findByLoginName(String loginName);
+    SysUser findByLoginName(String loginName, boolean link);
 
     /**
      * 查找所有用户。
