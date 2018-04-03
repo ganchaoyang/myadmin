@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,11 +42,6 @@ public class SysUserController {
         String username = (String) reqMap.get("username"), password = (String) reqMap.get("password");
         logger.debug("user login username : {} , password : {}", username, password);
         SysUser sysUser = sysUserService.findByLoginName(username,false);
-        Map<String, Object> data = new HashMap<String, Object>();
-        logger.debug("user:{}", JSON.toJSONString(sysUser));
-        if (sysUser == null){
-            return Result.error("用户名或密码错误!");
-        }
         try{
             SecurityUtils.getSubject().login(new UsernamePasswordToken(username,
                     new Sha256Hash(password, sysUser.getSalt()).toHex()));
@@ -100,6 +96,23 @@ public class SysUserController {
         logger.debug("delete user : {}", id);
         sysUserService.deleteById(id);
         return Result.success("删除成功。");
+    }
+
+    @RequestMapping(value = "/edit", method = RequestMethod.PUT)
+    @RequiresUser
+    public Result<String> edit(@RequestBody SysUser sysUser, HttpSession session){
+        // 判断这个用户是否存在。
+        logger.debug("update user : {}", JSON.toJSONString(sysUser));
+        if (sysUser.getLoginName()!=null &&
+                sysUserService.findByLoginName(sysUser.getLoginName(), false)!=null){
+            return Result.error("登录名称已存在！");
+        }
+        sysUser.setOpBy((String) session.getAttribute("me"));
+        sysUser.setUpdateTime(new Date());
+        int res = sysUserService.updateIgnoreNull(sysUser);
+        if (res == 0)
+            return Result.error("更新失败！");
+        return Result.success("更新成功！");
     }
 
 }

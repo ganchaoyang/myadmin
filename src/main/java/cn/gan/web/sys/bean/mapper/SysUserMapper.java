@@ -50,4 +50,7 @@ public interface SysUserMapper {
 
     @Delete("delete from sys_user_role where user_id = #{id}")
     int deleteAllRoles(@Param("id") String userId);
+
+    @UpdateProvider(type = SysUserDaoProvider.class, method = "updateIgnoreNull")
+    int updateIgnoreNull(@Param("user") SysUser sysUser);
 }

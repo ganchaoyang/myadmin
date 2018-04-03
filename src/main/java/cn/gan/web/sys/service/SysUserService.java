@@ -28,4 +28,11 @@ public interface SysUserService {
      */
     void deleteById(String id);
 
+    /**
+     * 更新用户，忽略空值。
+     * @param sysUser
+     * @return
+     */
+    int updateIgnoreNull(SysUser sysUser);
+
 }

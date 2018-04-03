@@ -48,4 +48,19 @@ public class SysUserServiceImpl implements SysUserService {
         sysUserMapper.deleteAllRoles(id);
         sysUserMapper.delete(id);
     }
+
+    @Override
+    public int updateIgnoreNull(SysUser sysUser) {
+        // 首先查询该用户。
+        SysUser tobeUpdate = sysUserMapper.findById(sysUser.getId());
+        if (tobeUpdate == null)
+            return 0;
+        // 判断密码是否为空。
+        if (sysUser.getPassword() != null && sysUser.getPassword().trim().length() > 0){
+            sysUser.setPassword((new Sha256Hash(sysUser.getPassword(),
+                    tobeUpdate.getSalt()).toHex()));
+        }
+        // 更新。
+        return sysUserMapper.updateIgnoreNull(sysUser);
+    }
 }
