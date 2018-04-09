@@ -16,10 +16,28 @@ public interface SysUnitService {
 
 
     /**
+     * 根据id查询单位。
+     * @param id
+     * @return
+     */
+    SysUnit findById(String id);
+
+
+    /**
      * 根据id该记录是否存在。
      * @param id
      * @return
      */
     boolean isExistById(String id);
+
+
+    /**
+     * 添加单位。
+     * @param unit
+     * @return
+     */
+    int addUnit(SysUnit unit);
+
+    int updateIgnoreNull(SysUnit unit);
 
 }
