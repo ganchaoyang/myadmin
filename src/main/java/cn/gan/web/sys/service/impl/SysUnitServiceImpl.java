@@ -31,6 +31,11 @@ public class SysUnitServiceImpl implements SysUnitService {
     }
 
     @Override
+    public SysUnit findByPidAndName(String parentId, String name) {
+        return sysUnitMapper.findByPidAndName(parentId, name);
+    }
+
+    @Override
     public boolean isExistById(String id) {
         int count = sysUnitMapper.count(id);
         if (count > 0)

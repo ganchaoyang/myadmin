@@ -24,6 +24,15 @@ public interface SysUnitService {
 
 
     /**
+     * 根据父单位和名称查找单位
+     * @param parentId
+     * @param name
+     * @return
+     */
+    SysUnit findByPidAndName(String parentId, String name);
+
+
+    /**
      * 根据id该记录是否存在。
      * @param id
      * @return

@@ -16,6 +16,9 @@ public interface SysUnitMapper {
     @Select("select * from sys_unit where id = #{id}")
     SysUnit findById(String id);
 
+    @Select("select * from sys_unit where parent_id = #{parentId} and name = #{name}")
+    SysUnit findByPidAndName(String parentId, String name);
+
     @Select("select count(id) from sys_unit where id = #{id}")
     int count(String id);
 

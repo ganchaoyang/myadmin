@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -48,6 +49,18 @@ public class SysUnitController {
         if (sysUnitService.addUnit(unit) == 1)
             return Result.success("添加单位成功！");
         return Result.error("未知错误");
+    }
+
+    @RequestMapping(value = "/edit", method = RequestMethod.PUT)
+    @RequiresUser
+    public Result<String> edit(@RequestBody SysUnit unit, HttpSession session){
+        logger.debug("edit unit id is {}, name is {}", unit.getId(), unit.getName()==null?"":unit.getName());
+        if (!sysUnitService.isExistById(unit.getId()))
+            return Result.error("该单位不存在！");
+        unit.setUpdateTime(new Date());
+        unit.setOpBy((String) session.getAttribute("me"));
+        sysUnitService.updateIgnoreNull(unit);
+        return Result.success("修改成功！");
     }
 
 }
