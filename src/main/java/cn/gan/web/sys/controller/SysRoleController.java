@@ -3,11 +3,14 @@ package cn.gan.web.sys.controller;
 import cn.gan.web.sys.bean.Result;
 import cn.gan.web.sys.bean.SysRole;
 import cn.gan.web.sys.service.SysRoleService;
+import org.apache.shiro.authz.annotation.RequiresUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
@@ -18,9 +21,25 @@ public class SysRoleController {
     private SysRoleService sysRoleService;
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
+    @RequiresUser
     public Result<List<SysRole>> data(){
         List<SysRole> roles = sysRoleService.findAll();
         return Result.success(roles);
+    }
+
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @RequiresUser
+    public Result<String> add(@RequestBody SysRole sysRole, HttpSession session){
+        sysRole.setOpBy((String) session.getAttribute("me"));
+        // 判断这个角色的名称是否存在。
+        if (sysRoleService.countByName(sysRole.getName()) > 0){
+            return Result.error("该名称已存在！");
+        }
+        if (sysRoleService.countByNote(sysRole.getNote()) > 0){
+            return Result.error("该角色标识已存在！");
+        }
+        sysRoleService.addRole(sysRole);
+        return Result.success("添加角色成功！");
     }
 
 }
