@@ -9,10 +9,7 @@ import org.apache.shiro.authz.annotation.RequiresUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.Date;
@@ -63,4 +60,24 @@ public class SysUnitController {
         return Result.success("修改成功！");
     }
 
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+    @RequiresUser
+    public Result<String> delete(@PathVariable("id") String id){
+        // 删除一个单位，会将其所有的子单位都删除干净。
+        // 首先取出该单位。
+        SysUnit unit = sysUnitService.findById(id);
+        if (unit == null) return Result.error("该单位不存在！");
+        // 删除该单位及其子单位。
+        sysUnitService.deleteWithAllChildren(unit);
+        // 如果有父级单位的话，取出其父级单位。
+        if (unit.getParentId() != null && unit.getParentId().length() > 0){
+            SysUnit parent = sysUnitService.findById(unit.getParentId());
+            // 判断父级单位是否有其他子集单位。
+            if (sysUnitService.countChildrenNumber(parent.getId()) == 0) {
+                parent.setHasChildren(false);
+                sysUnitService.updateIgnoreNull(parent);
+            }
+        }
+        return Result.success("删除成功！");
+    }
 }

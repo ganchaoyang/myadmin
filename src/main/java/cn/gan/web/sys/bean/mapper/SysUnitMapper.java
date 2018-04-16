@@ -44,4 +44,7 @@ public interface SysUnitMapper {
     @UpdateProvider(type = SysUnitDaoProvider.class, method = "updateIgnoreNull")
     int updateIgnoreNull(@Param("unit") SysUnit unit);
 
+    @Delete("delete from sys_unit where path like #{rex}")
+    int deleteLikeWithPath(String rex);
+
 }

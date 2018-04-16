@@ -69,4 +69,14 @@ public class SysUnitServiceImpl implements SysUnitService {
     public int updateIgnoreNull(SysUnit unit) {
         return sysUnitMapper.updateIgnoreNull(unit);
     }
+
+    @Override
+    public int deleteWithAllChildren(SysUnit unit) {
+        return sysUnitMapper.deleteLikeWithPath(unit.getPath() + "%");
+    }
+
+    @Override
+    public int countChildrenNumber(String id) {
+        return sysUnitMapper.countChildren(id);
+    }
 }

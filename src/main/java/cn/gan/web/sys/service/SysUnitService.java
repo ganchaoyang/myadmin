@@ -47,6 +47,26 @@ public interface SysUnitService {
      */
     int addUnit(SysUnit unit);
 
+    /**
+     * 更新一个单位。
+     * @param unit
+     * @return
+     */
     int updateIgnoreNull(SysUnit unit);
 
+
+    /**
+     * 删除一个单位，并随即删除其所有子单位。
+     * @param unit
+     * @return
+     */
+    int deleteWithAllChildren(SysUnit unit);
+
+
+    /**
+     * 统计一个单位有多少个子单位。
+     * @param id
+     * @return
+     */
+    int countChildrenNumber(String id);
 }
