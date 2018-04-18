@@ -5,10 +5,7 @@ import cn.gan.web.sys.bean.SysRole;
 import cn.gan.web.sys.service.SysRoleService;
 import org.apache.shiro.authz.annotation.RequiresUser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -40,6 +37,16 @@ public class SysRoleController {
         }
         sysRoleService.addRole(sysRole);
         return Result.success("添加角色成功！");
+    }
+
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+    @RequiresUser
+    public Result<String> delete(@PathVariable("id")String id){
+        // 首先删除该角色与用户的关联关系。
+        sysRoleService.clearUsers(id);
+        // 删除角色。
+        sysRoleService.deleteById(id);
+        return Result.success("删除成功！");
     }
 
 }

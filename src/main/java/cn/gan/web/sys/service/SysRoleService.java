@@ -22,6 +22,13 @@ public interface SysRoleService {
     int addRole(SysRole sysRole);
 
     /**
+     * 根据Id删除角色。
+     * @param id
+     * @return
+     */
+    int deleteById(String id);
+
+    /**
      * 根据角色名称统计角色数量。
      * @param name
      * @return
@@ -34,5 +41,14 @@ public interface SysRoleService {
      * @return
      */
     int countByNote(String note);
+
+
+    /**
+     * 移除一个角色关联的所有用户的关联关系。
+     * @param id
+     *     角色Id.
+     * @return
+     */
+    int clearUsers(String id);
 
 }

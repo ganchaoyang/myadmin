@@ -30,6 +30,11 @@ public class SysRoleServiceImpl implements SysRoleService {
     }
 
     @Override
+    public int deleteById(String id) {
+        return sysRoleMapper.delete(id);
+    }
+
+    @Override
     public int countByName(String name) {
         return sysRoleMapper.countByName(name);
     }
@@ -37,5 +42,10 @@ public class SysRoleServiceImpl implements SysRoleService {
     @Override
     public int countByNote(String note) {
         return sysRoleMapper.countByNote(note);
+    }
+
+    @Override
+    public int clearUsers(String id) {
+        return sysRoleMapper.clearUsers(id);
     }
 }
