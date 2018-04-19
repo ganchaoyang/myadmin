@@ -1,9 +1,6 @@
 package cn.gan.web.sys.bean;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class SysPerm {
@@ -169,5 +166,13 @@ public class SysPerm {
             }
         });
         return result;
+    }
+
+    public static String generateCode(SysPerm parent, SysPerm sysPerm){
+        String[] codeNodes = sysPerm.getCode().split("\\.");
+        String lastNode = codeNodes[codeNodes.length - 1];
+        if (parent == null)
+            return lastNode;
+        return parent.getCode() + "." + lastNode;
     }
 }
