@@ -24,6 +24,8 @@ public class SysPerm {
 
     private String href;
 
+    private String icon;
+
     private String type;
 
     private Date createTime;
@@ -136,6 +138,14 @@ public class SysPerm {
 
     public void setParentId(String parentId) {
         this.parentId = parentId;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 
     public static List<SysPerm> toTrees(List<SysPerm> perms){
