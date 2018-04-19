@@ -8,10 +8,7 @@ import org.apache.shiro.authz.annotation.RequiresUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -75,6 +72,28 @@ public class SysPermController {
         sysPerm.setNote(sysPerm.getCode());
         sysPermService.updateIgnoreNull(sysPerm);
         return Result.success("修改成功！");
+    }
+
+
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+    @RequiresUser
+    public Result<String> delete(@PathVariable("id") String id){
+        logger.debug("delete perm,the id is {}", id);
+        // 首先查询这个权限。
+        SysPerm toBeDel = sysPermService.findById(id);
+        if (toBeDel == null)
+            return Result.error("该权限不存在！");
+        sysPermService.deleteWithAllChildren(toBeDel);
+        // 查找其父级权限。
+        if (toBeDel.getParentId() != null){
+            SysPerm parent = sysPermService.findById(toBeDel.getParentId());
+            if (parent != null &&
+                    sysPermService.countChildrenNumber(parent.getParentId()) == 0){
+                parent.setHasChildren(false);
+                sysPermService.updateIgnoreNull(parent);
+            }
+        }
+        return Result.success("删除成功！");
     }
 
 }

@@ -52,4 +52,20 @@ public interface SysPermService {
      */
     int updateIgnoreNull(SysPerm perm);
 
+
+    /**
+     * 删除一个权限，并随即删除其所有子权限。
+     * @param perm
+     * @return
+     */
+    int deleteWithAllChildren(SysPerm perm);
+
+
+    /**
+     * 统计一个权限有多少个子权限。
+     * @param id
+     * @return
+     */
+    int countChildrenNumber(String id);
+
 }

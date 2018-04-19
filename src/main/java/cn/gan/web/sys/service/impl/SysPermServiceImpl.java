@@ -52,4 +52,14 @@ public class SysPermServiceImpl implements SysPermService{
         perm.setUpdateTime(new Date());
         return sysPermMapper.updateIgnoreNull(perm);
     }
+
+    @Override
+    public int deleteWithAllChildren(SysPerm perm) {
+        return sysPermMapper.deleteLikeWithCode(perm.getCode() + "%");
+    }
+
+    @Override
+    public int countChildrenNumber(String id) {
+        return sysPermMapper.countChildren(id);
+    }
 }

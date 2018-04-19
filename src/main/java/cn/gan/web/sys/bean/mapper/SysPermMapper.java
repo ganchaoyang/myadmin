@@ -22,6 +22,9 @@ public interface SysPermMapper {
     @Select("select count(id) from sys_perm where code = #{code}")
     int countByCode(String name);
 
+    @Select("select count(id) from sys_perm where parent_id = #{parentId}")
+    int countChildren(String parentId);
+
     @Insert("insert into sys_perm(id, parent_id, code, name, note, " +
             "disabled, create_time, update_time, op_by, has_children, href, type, icon) values(" +
             "#{perm.id}, #{perm.parentId}, #{perm.code}, #{perm.name}, #{perm.note}, #{perm.disabled}, " +
@@ -33,5 +36,8 @@ public interface SysPermMapper {
 
     @UpdateProvider(type = SysPermDaoProvider.class, method = "updateIgnoreNull")
     int updateIgnoreNull(@Param("perm") SysPerm perm);
+
+    @Delete("delete from sys_perm where code like #{rex}")
+    int deleteLikeWithCode(String rex);
 
 }
