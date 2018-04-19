@@ -44,4 +44,12 @@ public interface SysPermService {
      */
     int addPerm(SysPerm perm);
 
+
+    /**
+     * 更新，忽略空值。
+     * @param perm
+     * @return
+     */
+    int updateIgnoreNull(SysPerm perm);
+
 }

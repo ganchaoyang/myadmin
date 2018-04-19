@@ -46,4 +46,10 @@ public class SysPermServiceImpl implements SysPermService{
         perm.setUpdateTime(new Date());
         return sysPermMapper.insert(perm);
     }
+
+    @Override
+    public int updateIgnoreNull(SysPerm perm) {
+        perm.setUpdateTime(new Date());
+        return sysPermMapper.updateIgnoreNull(perm);
+    }
 }

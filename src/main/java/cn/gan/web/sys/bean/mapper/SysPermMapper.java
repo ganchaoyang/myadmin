@@ -1,6 +1,7 @@
 package cn.gan.web.sys.bean.mapper;
 
 import cn.gan.web.sys.bean.SysPerm;
+import cn.gan.web.sys.bean.provider.SysPermDaoProvider;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.StatementType;
 
@@ -29,5 +30,8 @@ public interface SysPermMapper {
     @SelectKey(statement = "select replace(UUID(), '-', '') as id", keyProperty = "perm.id",
             before = true, statementType = StatementType.STATEMENT, resultType = String.class)
     int insert(@Param("perm") SysPerm perm);
+
+    @UpdateProvider(type = SysPermDaoProvider.class, method = "updateIgnoreNull")
+    int updateIgnoreNull(@Param("perm") SysPerm perm);
 
 }

@@ -51,4 +51,30 @@ public class SysPermController {
         return Result.success("添加成功！");
     }
 
+
+    @RequestMapping(value = "/edit", method = RequestMethod.PUT)
+    @RequiresUser
+    public Result<String> edit(@RequestBody SysPerm sysPerm, HttpSession session){
+        logger.debug("update perm {}", JSON.toJSONString(sysPerm));
+        // 先查询出旧的权限。
+        SysPerm old = sysPermService.findById(sysPerm.getId());
+        if (!sysPerm.getName().equals(old.getName()) &&
+                sysPermService.countByName(sysPerm.getName()) > 0){
+            return Result.error("权限名称已存在！");
+        }
+        SysPerm parent = null;
+        if (sysPerm.getParentId() != null)
+            parent = sysPermService.findById(sysPerm.getParentId());
+        sysPerm.setCode(SysPerm.generateCode(parent, sysPerm));
+        if (!sysPerm.getCode().equals(old.getCode()) &&
+                sysPermService.countByCode(sysPerm.getCode()) > 0){
+            return Result.error("权限标识已存在！");
+        }
+        // 可以修改。
+        sysPerm.setOpBy((String) session.getAttribute("me"));
+        sysPerm.setNote(sysPerm.getCode());
+        sysPermService.updateIgnoreNull(sysPerm);
+        return Result.success("修改成功！");
+    }
+
 }
