@@ -24,6 +24,13 @@ public class SysRoleController {
         return Result.success(roles);
     }
 
+    @RequestMapping(value = "/data/{id}", method = RequestMethod.GET)
+    @RequiresUser
+    public Result<SysRole> data(@PathVariable("id") String id){
+        SysRole role = sysRoleService.findById(id, true);
+        return Result.success(role);
+    }
+
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @RequiresUser
     public Result<String> add(@RequestBody SysRole sysRole, HttpSession session){

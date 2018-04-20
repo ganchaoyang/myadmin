@@ -22,6 +22,13 @@ public class SysRoleServiceImpl implements SysRoleService {
     }
 
     @Override
+    public SysRole findById(String id, boolean link) {
+        if (link)
+            return sysRoleMapper.findWithLinkById(id);
+        return sysRoleMapper.findById(id);
+    }
+
+    @Override
     public int addRole(SysRole sysRole) {
         sysRole.setCreateTime(new Date());
         sysRole.setUpdateTime(new Date());

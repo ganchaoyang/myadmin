@@ -3,6 +3,7 @@ package cn.gan.web.sys.bean.mapper;
 import cn.gan.web.sys.bean.SysRole;
 import cn.gan.web.sys.bean.provider.SysRoleDaoProvider;
 import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.mapping.FetchType;
 import org.apache.ibatis.mapping.StatementType;
 
 import java.util.List;
@@ -15,6 +16,17 @@ public interface SysRoleMapper {
 
     @Select("select * from sys_role where id in (select role_id from sys_user_role where user_id = #{id})")
     List<SysRole> findByUserId(String id);
+
+    @Select("select * from sys_role where id = #{id}")
+    SysRole findById(String id);
+
+    @Select("select * from sys_role where id = #{id}")
+    @Results(id = "link", value = {
+            @Result(column = "id", property = "id"),
+            @Result(property = "users", column = "id", javaType = List.class,
+            many = @Many(fetchType = FetchType.EAGER, select = "cn.gan.web.sys.bean.mapper.SysUserMapper.findByRoleId"))
+    })
+    SysRole findWithLinkById(String id);
 
     @Select("select count(id) from sys_role")
     int countRoleNumber();

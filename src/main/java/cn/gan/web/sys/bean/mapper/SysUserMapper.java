@@ -16,6 +16,9 @@ public interface SysUserMapper {
     @ResultMap("link")
     List<SysUser> findAll();
 
+    @Select("select * from sys_user where id in (select user_id from sys_user_role where role_id = #{roleId})")
+    List<SysUser> findByRoleId(String roleId);
+
     @Select("select * from sys_user where login_name = #{loginName}")
     SysUser findByLoginName(String loginName);
 

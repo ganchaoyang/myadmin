@@ -15,6 +15,15 @@ public interface SysRoleService {
 
 
     /**
+     * 通过Id查询。
+     * @param id
+     * @param link
+     *      是否需要携带关联字段。
+     * @return
+     */
+    SysRole findById(String id, boolean link);
+
+    /**
      * 新增一个角色
      * @param sysRole
      * @return

@@ -1,6 +1,7 @@
 package cn.gan.web.sys.bean;
 
 import java.util.Date;
+import java.util.List;
 
 public class SysRole {
 
@@ -21,6 +22,8 @@ public class SysRole {
     private Date updateTime;
 
     private String opBy;
+
+    private List<SysUser> users;
 
     public String getId() {
         return id;
@@ -92,5 +95,13 @@ public class SysRole {
 
     public void setOpBy(String opBy) {
         this.opBy = opBy;
+    }
+
+    public List<SysUser> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<SysUser> users) {
+        this.users = users;
     }
 }
