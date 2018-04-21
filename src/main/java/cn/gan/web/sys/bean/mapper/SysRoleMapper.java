@@ -1,6 +1,7 @@
 package cn.gan.web.sys.bean.mapper;
 
 import cn.gan.web.sys.bean.SysRole;
+import cn.gan.web.sys.bean.SysUser;
 import cn.gan.web.sys.bean.provider.SysRoleDaoProvider;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.FetchType;
@@ -67,5 +68,13 @@ public interface SysRoleMapper {
      */
     @Delete("delete from sys_user_role where role_id = #{id}")
     int clearUsers(String id);
+
+
+    @UpdateProvider(type = SysRoleDaoProvider.class, method = "updateIgnoreNull")
+    int updateIgnoreNull(@Param("role") SysRole sysRole);
+
+
+    @InsertProvider(type = SysRoleDaoProvider.class, method = "addUsers")
+    int addUsers(@Param("roleId") String roleId, @Param("users") List<SysUser> users);
 
 }

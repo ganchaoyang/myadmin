@@ -60,4 +60,12 @@ public interface SysRoleService {
      */
     int clearUsers(String id);
 
+
+    /**
+     * 更新一个角色。
+     * @param sysRole
+     * @return
+     */
+    int updateRole(SysRole sysRole);
+
 }

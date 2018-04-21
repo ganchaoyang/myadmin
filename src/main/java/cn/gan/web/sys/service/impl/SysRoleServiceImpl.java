@@ -55,4 +55,15 @@ public class SysRoleServiceImpl implements SysRoleService {
     public int clearUsers(String id) {
         return sysRoleMapper.clearUsers(id);
     }
+
+    @Override
+    public int updateRole(SysRole sysRole) {
+        if (sysRole.getUsers() != null) { // 此时代表需要更新该角色下的用户。
+            sysRoleMapper.clearUsers(sysRole.getId());
+            if (sysRole.getUsers().size() > 0)
+                sysRoleMapper.addUsers(sysRole.getId(), sysRole.getUsers());
+        }
+        // 更新角色本身的信息。
+        return sysRoleMapper.updateIgnoreNull(sysRole);
+    }
 }

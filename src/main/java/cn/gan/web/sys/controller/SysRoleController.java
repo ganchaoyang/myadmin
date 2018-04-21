@@ -56,4 +56,24 @@ public class SysRoleController {
         return Result.success("删除成功！");
     }
 
+
+    @RequestMapping(value = "/edit", method = RequestMethod.PUT)
+    @RequiresUser
+    public Result<String> edit(@RequestBody SysRole sysRole){
+        // 首先判断该角色是否存在。
+        SysRole toBeUpdate = sysRoleService.findById(sysRole.getId(), false);
+        if (toBeUpdate == null)
+            return Result.error("该角色不存在！");
+        if (sysRole.getName() != null && !sysRole.getName().equals(toBeUpdate.getName()) &&
+                sysRoleService.countByName(sysRole.getName()) > 0){
+            return Result.error("该名称已存在！");
+        }
+        if (sysRole.getNote() != null && !sysRole.getNote().equals(toBeUpdate.getNote()) &&
+                sysRoleService.countByNote(sysRole.getNote()) > 0){
+            return Result.error("该角色标识已存在！");
+        }
+        sysRoleService.updateRole(sysRole);
+        return  Result.success("更新成功！");
+    }
+
 }
