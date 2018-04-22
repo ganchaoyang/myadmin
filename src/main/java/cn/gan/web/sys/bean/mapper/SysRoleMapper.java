@@ -1,5 +1,6 @@
 package cn.gan.web.sys.bean.mapper;
 
+import cn.gan.web.sys.bean.SysPerm;
 import cn.gan.web.sys.bean.SysRole;
 import cn.gan.web.sys.bean.SysUser;
 import cn.gan.web.sys.bean.provider.SysRoleDaoProvider;
@@ -25,7 +26,9 @@ public interface SysRoleMapper {
     @Results(id = "link", value = {
             @Result(column = "id", property = "id"),
             @Result(property = "users", column = "id", javaType = List.class,
-            many = @Many(fetchType = FetchType.EAGER, select = "cn.gan.web.sys.bean.mapper.SysUserMapper.findByRoleId"))
+            many = @Many(fetchType = FetchType.EAGER, select = "cn.gan.web.sys.bean.mapper.SysUserMapper.findByRoleId")),
+            @Result(property = "perms", column = "id", javaType = List.class,
+            many = @Many(fetchType = FetchType.EAGER, select = "cn.gan.web.sys.bean.mapper.SysPermMapper.findByRoleId"))
     })
     SysRole findWithLinkById(String id);
 
@@ -70,11 +73,18 @@ public interface SysRoleMapper {
     int clearUsers(String id);
 
 
+    @Delete("delete from sys_role_perm where role_id = #{id}")
+    int clearPerms(String id);
+
+
     @UpdateProvider(type = SysRoleDaoProvider.class, method = "updateIgnoreNull")
     int updateIgnoreNull(@Param("role") SysRole sysRole);
 
 
     @InsertProvider(type = SysRoleDaoProvider.class, method = "addUsers")
     int addUsers(@Param("roleId") String roleId, @Param("users") List<SysUser> users);
+
+    @InsertProvider(type = SysRoleDaoProvider.class, method = "addPerms")
+    int addPerms(@Param("id") String roleId, @Param("perms")List<SysPerm> perms);
 
 }

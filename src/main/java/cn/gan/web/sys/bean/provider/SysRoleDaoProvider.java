@@ -1,5 +1,6 @@
 package cn.gan.web.sys.bean.provider;
 
+import cn.gan.web.sys.bean.SysPerm;
 import cn.gan.web.sys.bean.SysRole;
 import cn.gan.web.sys.bean.SysUser;
 
@@ -29,6 +30,22 @@ public class SysRoleDaoProvider {
             sb.append(", #{roleId}");
             sb.append(')');
             if (i < (users.size()-1))
+                sb.append(",");
+        }
+        return sb.toString();
+    }
+
+
+    public String addPerms(Map<String, Object> map){
+        List<SysPerm> perms = (List<SysPerm>) map.get("perms");
+        StringBuilder sb = new StringBuilder("insert into sys_role_perm(perm_id, role_id) values ");
+        MessageFormat mf = new MessageFormat("#'{'perms[{0}].id'}'");
+        for (int i=0; i<perms.size(); i++){
+            sb.append('(');
+            sb.append(mf.format(new Object[]{i}));
+            sb.append(", #{id}");
+            sb.append(')');
+            if (i < (perms.size()-1))
                 sb.append(",");
         }
         return sb.toString();

@@ -25,6 +25,8 @@ public class SysRole {
 
     private List<SysUser> users;
 
+    private List<SysPerm> perms;
+
     public String getId() {
         return id;
     }
@@ -103,5 +105,13 @@ public class SysRole {
 
     public void setUsers(List<SysUser> users) {
         this.users = users;
+    }
+
+    public List<SysPerm> getPerms() {
+        return perms;
+    }
+
+    public void setPerms(List<SysPerm> perms) {
+        this.perms = perms;
     }
 }

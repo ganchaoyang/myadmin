@@ -1,6 +1,7 @@
 package cn.gan.web.sys.service.impl;
 
 import cn.gan.framework.util.Strings;
+import cn.gan.web.sys.bean.SysPerm;
 import cn.gan.web.sys.bean.SysRole;
 import cn.gan.web.sys.bean.mapper.SysRoleMapper;
 import cn.gan.web.sys.service.SysRoleService;
@@ -22,10 +23,15 @@ public class SysRoleServiceImpl implements SysRoleService {
     }
 
     @Override
-    public SysRole findById(String id, boolean link) {
+    public SysRole findById(String id, boolean link, boolean permsTree) {
+        SysRole sysRole = null;
         if (link)
-            return sysRoleMapper.findWithLinkById(id);
-        return sysRoleMapper.findById(id);
+            sysRole = sysRoleMapper.findWithLinkById(id);
+        else sysRole = sysRoleMapper.findById(id);
+        if (link && permsTree){
+            sysRole.setPerms(SysPerm.toTrees(sysRole.getPerms()));
+        }
+        return sysRole;
     }
 
     @Override
@@ -62,6 +68,11 @@ public class SysRoleServiceImpl implements SysRoleService {
             sysRoleMapper.clearUsers(sysRole.getId());
             if (sysRole.getUsers().size() > 0)
                 sysRoleMapper.addUsers(sysRole.getId(), sysRole.getUsers());
+        }
+        if (sysRole.getPerms() != null) { // 此时代表需要更新该角色下的权限。
+            sysRoleMapper.clearPerms(sysRole.getId());
+            if (sysRole.getPerms().size() > 0)
+                sysRoleMapper.addPerms(sysRole.getId(), sysRole.getPerms());
         }
         // 更新角色本身的信息。
         return sysRoleMapper.updateIgnoreNull(sysRole);

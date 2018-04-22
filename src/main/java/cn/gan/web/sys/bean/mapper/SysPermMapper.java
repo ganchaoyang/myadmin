@@ -16,6 +16,9 @@ public interface SysPermMapper {
     @Select("select * from sys_perm where id = #{id}")
     SysPerm findById(String id);
 
+    @Select("select * from sys_perm where id in (select perm_id from sys_role_perm where role_id = #{roleId})")
+    List<SysPerm> findByRoleId(String roleId);
+
     @Select("select count(id) from sys_perm where name = #{name}")
     int countByName(String name);
 

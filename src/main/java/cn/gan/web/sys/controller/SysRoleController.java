@@ -27,7 +27,7 @@ public class SysRoleController {
     @RequestMapping(value = "/data/{id}", method = RequestMethod.GET)
     @RequiresUser
     public Result<SysRole> data(@PathVariable("id") String id){
-        SysRole role = sysRoleService.findById(id, true);
+        SysRole role = sysRoleService.findById(id, true, false);
         return Result.success(role);
     }
 
@@ -61,7 +61,7 @@ public class SysRoleController {
     @RequiresUser
     public Result<String> edit(@RequestBody SysRole sysRole){
         // 首先判断该角色是否存在。
-        SysRole toBeUpdate = sysRoleService.findById(sysRole.getId(), false);
+        SysRole toBeUpdate = sysRoleService.findById(sysRole.getId(), false, false);
         if (toBeUpdate == null)
             return Result.error("该角色不存在！");
         if (sysRole.getName() != null && !sysRole.getName().equals(toBeUpdate.getName()) &&

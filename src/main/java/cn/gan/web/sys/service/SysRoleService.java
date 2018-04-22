@@ -19,9 +19,11 @@ public interface SysRoleService {
      * @param id
      * @param link
      *      是否需要携带关联字段。
+     * @param permsTree
+     *      角色权限是否需要以树状结构返回。
      * @return
      */
-    SysRole findById(String id, boolean link);
+    SysRole findById(String id, boolean link, boolean permsTree);
 
     /**
      * 新增一个角色
