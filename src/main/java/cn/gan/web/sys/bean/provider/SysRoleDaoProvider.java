@@ -58,7 +58,7 @@ public class SysRoleDaoProvider {
             sb.append("name = #{role.name}, ");
         }
         if (role.getNote() != null){
-            sb.append("name = #{role.note}, ");
+            sb.append("note = #{role.note}, ");
         }
         if (role.getAliasName() != null){
             sb.append("alias_name = #{role.aliasName}, ");
