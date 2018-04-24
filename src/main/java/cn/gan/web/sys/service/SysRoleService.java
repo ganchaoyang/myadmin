@@ -55,15 +55,6 @@ public interface SysRoleService {
 
 
     /**
-     * 移除一个角色关联的所有用户的关联关系。
-     * @param id
-     *     角色Id.
-     * @return
-     */
-    int clearUsers(String id);
-
-
-    /**
      * 更新一个角色。
      * @param sysRole
      * @return

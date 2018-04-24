@@ -49,8 +49,6 @@ public class SysRoleController {
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
     @RequiresUser
     public Result<String> delete(@PathVariable("id")String id){
-        // 首先删除该角色与用户的关联关系。
-        sysRoleService.clearUsers(id);
         // 删除角色。
         sysRoleService.deleteById(id);
         return Result.success("删除成功！");

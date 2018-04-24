@@ -44,6 +44,11 @@ public class SysRoleServiceImpl implements SysRoleService {
 
     @Override
     public int deleteById(String id) {
+        // 首先清除用户与该角色的绑定关系。
+        sysRoleMapper.clearUsers(id);
+        // 清除权限与该角色的绑定关系。
+        sysRoleMapper.clearPerms(id);
+        // 删除该角色。
         return sysRoleMapper.delete(id);
     }
 
@@ -55,11 +60,6 @@ public class SysRoleServiceImpl implements SysRoleService {
     @Override
     public int countByNote(String note) {
         return sysRoleMapper.countByNote(note);
-    }
-
-    @Override
-    public int clearUsers(String id) {
-        return sysRoleMapper.clearUsers(id);
     }
 
     @Override
