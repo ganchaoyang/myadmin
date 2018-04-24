@@ -92,8 +92,11 @@ public class SysUserController {
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
     @RequiresUser
-    public Result<String> delete(@PathVariable("id") String id){
+    public Result<String> delete(@PathVariable("id") String id, HttpSession session){
         logger.debug("delete user : {}", id);
+        if (id.equals(session.getAttribute("me"))) {
+            return Result.error("对不起，您无法删除自己！");
+        }
         sysUserService.deleteById(id);
         return Result.success("删除成功。");
     }
