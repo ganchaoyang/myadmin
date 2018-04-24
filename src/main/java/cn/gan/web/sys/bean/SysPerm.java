@@ -31,6 +31,8 @@ public class SysPerm {
 
     private String opBy;
 
+    private List<SysRole> roles;
+
     private List<SysPerm> children;
 
     public String getId() {
@@ -143,6 +145,14 @@ public class SysPerm {
 
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    public List<SysRole> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<SysRole> roles) {
+        this.roles = roles;
     }
 
     public static List<SysPerm> toTrees(List<SysPerm> perms){

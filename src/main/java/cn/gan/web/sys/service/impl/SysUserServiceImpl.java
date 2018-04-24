@@ -1,21 +1,27 @@
 package cn.gan.web.sys.service.impl;
 
+import cn.gan.web.sys.bean.SysPerm;
+import cn.gan.web.sys.bean.SysRole;
 import cn.gan.web.sys.bean.SysUser;
+import cn.gan.web.sys.bean.mapper.SysRoleMapper;
 import cn.gan.web.sys.bean.mapper.SysUserMapper;
 import cn.gan.web.sys.service.SysUserService;
 import com.alibaba.fastjson.JSON;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service(value = "sysUserService")
 public class SysUserServiceImpl implements SysUserService {
 
     @Autowired
     private SysUserMapper sysUserMapper;
+
+    @Autowired
+    private SysRoleMapper sysRoleMapper;
 
     @Override
     public void addUser(SysUser sysUser) {
@@ -64,5 +70,26 @@ public class SysUserServiceImpl implements SysUserService {
         }
         // 更新。
         return sysUserMapper.updateIgnoreNull(sysUser);
+    }
+
+    @Override
+    public List<SysPerm> findPermsOfUser(String userId, boolean tree) {
+        // 查询这个用户的角色信息。
+        List<SysRole> sysRoles = sysRoleMapper.findByUserId(userId);
+        Map<String, SysPerm> temp = new HashMap<>();
+        sysRoles.stream().forEach(one -> {
+            if (one.getPerms() != null && !one.getPerms().isEmpty()){
+                one.getPerms().stream().forEach(perm -> {
+                    temp.put(perm.getId(), perm);
+                });
+            }
+        });
+        List<SysPerm> result = new ArrayList<>();
+        if (!temp.isEmpty()){
+            result = temp.entrySet().stream().map(one -> one.getValue()).collect(Collectors.toList());
+        }
+        if (tree)
+            result = SysPerm.toTrees(result);
+        return result;
     }
 }

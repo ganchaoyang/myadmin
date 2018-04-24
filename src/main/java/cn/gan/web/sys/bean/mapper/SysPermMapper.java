@@ -3,6 +3,7 @@ package cn.gan.web.sys.bean.mapper;
 import cn.gan.web.sys.bean.SysPerm;
 import cn.gan.web.sys.bean.provider.SysPermDaoProvider;
 import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.mapping.FetchType;
 import org.apache.ibatis.mapping.StatementType;
 
 import java.util.List;
@@ -11,6 +12,11 @@ import java.util.List;
 public interface SysPermMapper {
 
     @Select("select * from sys_perm order by name desc")
+    @Results(id = "link", value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "roles", column = "id", javaType = List.class,
+                    many = @Many(fetchType = FetchType.EAGER, select = "cn.gan.web.sys.bean.mapper.SysRoleMapper.findByPermId"))
+    })
     List<SysPerm> findAll();
 
     @Select("select * from sys_perm where id = #{id}")

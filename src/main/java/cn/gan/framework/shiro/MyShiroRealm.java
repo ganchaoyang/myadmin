@@ -32,6 +32,8 @@ public class MyShiroRealm extends AuthorizingRealm{
         String username = (String) authenticationToken.getPrincipal();
         // 从数据库中获取该用户。
         SysUser sysUser = sysUserService.findByLoginName(username, true);
+        // 查询该用户的所有权限。
+        sysUser.setPerms(sysUserService.findPermsOfUser(sysUser.getId(), false));
         System.out.println(JSON.toJSONString(sysUser));
         // 在实现角色模块之前，此处先这么处理。
         if (sysUser == null)

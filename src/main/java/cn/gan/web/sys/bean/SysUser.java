@@ -35,6 +35,8 @@ public class SysUser implements Serializable{
 
     private SysUser opUser;
 
+    private List<SysPerm> perms;
+
     public String getId() {
         return id;
     }
@@ -145,5 +147,13 @@ public class SysUser implements Serializable{
 
     public void setOpUser(SysUser opUser) {
         this.opUser = opUser;
+    }
+
+    public List<SysPerm> getPerms() {
+        return perms;
+    }
+
+    public void setPerms(List<SysPerm> perms) {
+        this.perms = perms;
     }
 }

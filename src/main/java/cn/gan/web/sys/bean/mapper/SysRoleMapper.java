@@ -17,7 +17,11 @@ public interface SysRoleMapper {
     List<SysRole> findAll();
 
     @Select("select * from sys_role where id in (select role_id from sys_user_role where user_id = #{id})")
+    @ResultMap(value = "link")
     List<SysRole> findByUserId(String id);
+
+    @Select("select * from sys_role where id in (select role_id from sys_role_perm where perm_id = #{id})")
+    List<SysRole> findByPermId(String id);
 
     @Select("select * from sys_role where id = #{id}")
     SysRole findById(String id);

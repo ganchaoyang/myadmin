@@ -37,8 +37,11 @@ public class SysPermController {
         if (sysPermService.countByName(sysPerm.getName()) > 0)
             return Result.error("权限名称已存在！");
         SysPerm parent = null;
-        if (sysPerm.getParentId() != null)
+        if (sysPerm.getParentId() != null){
             parent = sysPermService.findById(sysPerm.getParentId());
+            parent.setHasChildren(true);
+            sysPermService.updateIgnoreNull(parent);
+        }
         sysPerm.setCode(SysPerm.generateCode(parent, sysPerm));
         if (sysPermService.countByCode(sysPerm.getCode()) > 0)
             return Result.error("权限标识已存在！");

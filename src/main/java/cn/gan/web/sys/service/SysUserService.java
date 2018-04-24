@@ -1,5 +1,6 @@
 package cn.gan.web.sys.service;
 
+import cn.gan.web.sys.bean.SysPerm;
 import cn.gan.web.sys.bean.SysUser;
 
 import java.util.List;
@@ -35,4 +36,12 @@ public interface SysUserService {
      */
     int updateIgnoreNull(SysUser sysUser);
 
+    /**
+     * 获取一个用户的权限。
+     * @param userId
+     * @param tree
+     *      是否以树状返回。
+     * @return
+     */
+    List<SysPerm> findPermsOfUser(String userId, boolean tree);
 }
