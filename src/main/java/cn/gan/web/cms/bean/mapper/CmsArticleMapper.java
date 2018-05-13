@@ -3,6 +3,7 @@ package cn.gan.web.cms.bean.mapper;
 import cn.gan.web.cms.bean.CmsArticle;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectKey;
 import org.apache.ibatis.mapping.StatementType;
 
@@ -15,6 +16,6 @@ public interface CmsArticleMapper {
             "#{article.views}, #{article.type}, #{article.status}, #{article.createTime}, #{article.updateTime})")
     @SelectKey(statement = "select replace(UUID(), '-', '') as id", keyProperty = "article.id",
             before = true, statementType = StatementType.STATEMENT, resultType = String.class)
-    int insert(CmsArticle article);
+    int insert(@Param("article") CmsArticle article);
 
 }

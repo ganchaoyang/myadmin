@@ -4,21 +4,22 @@ import java.util.Date;
 
 public class CmsArticle {
 
-    enum Mode{
+    public enum Mode{
         PUBLIC,     // 公开
         PRIVATE     // 保密
     }
 
-    enum Type{
+    public enum Type{
+        ARTICLE,    // 普通文章。
         BLOG        // 博客
     }
 
-    enum Status{
+    public enum Status{
         DRAFT,      // 草稿
         PUBLISHED   // 已发布
     }
 
-    enum ContentType{
+    public enum ContentType{
         MD,         // 使用MarkDown语法。
         HTML,       // 使用HTML语法。
         TEXT        // 纯Text
