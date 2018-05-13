@@ -18,14 +18,26 @@ public class CmsArticle {
         PUBLISHED   // 已发布
     }
 
+    enum ContentType{
+        MD,         // 使用MarkDown语法。
+        HTML,       // 使用HTML语法。
+        TEXT        // 纯Text
+    }
+
     // 文章id,主键。
     private String id;
 
     // 文章标题。
     private String title;
 
+    // 文章副标题。
+    private String subtitle;
+
     // 文章内容。
     private String content;
+
+    // 文章内容所使用的语法。
+    private ContentType contentType;
 
     // 模式（公开，保密）
     private Mode mode;
@@ -126,5 +138,21 @@ public class CmsArticle {
 
     public void setOpBy(String opBy) {
         this.opBy = opBy;
+    }
+
+    public String getSubtitle() {
+        return subtitle;
+    }
+
+    public void setSubtitle(String subtitle) {
+        this.subtitle = subtitle;
+    }
+
+    public ContentType getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(ContentType contentType) {
+        this.contentType = contentType;
     }
 }
