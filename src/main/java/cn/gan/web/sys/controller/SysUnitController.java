@@ -25,6 +25,7 @@ public class SysUnitController {
     private SysUnitService sysUnitService;
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
+    @RequiresUser
     public Result<List<SysUnit>> findAll(boolean tree){
         logger.debug("find all units, tree is {}", tree);
         List<SysUnit> units = sysUnitService.findAll(tree);

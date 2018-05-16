@@ -1,11 +1,10 @@
 package cn.gan.web.cms.bean.mapper;
 
 import cn.gan.web.cms.bean.CmsArticle;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.SelectKey;
+import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.StatementType;
+
+import java.util.List;
 
 @Mapper
 public interface CmsArticleMapper {
@@ -17,5 +16,9 @@ public interface CmsArticleMapper {
     @SelectKey(statement = "select replace(UUID(), '-', '') as id", keyProperty = "article.id",
             before = true, statementType = StatementType.STATEMENT, resultType = String.class)
     int insert(@Param("article") CmsArticle article);
+
+
+    @Select("select * from t_article order by update_time desc")
+    List<CmsArticle> findAll();
 
 }

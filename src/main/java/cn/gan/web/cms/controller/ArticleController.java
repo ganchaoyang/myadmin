@@ -4,12 +4,12 @@ import cn.gan.web.cms.bean.CmsArticle;
 import cn.gan.web.cms.service.CmsArticleService;
 import cn.gan.web.sys.bean.Result;
 import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.PageInfo;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresUser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
@@ -20,10 +20,10 @@ public class ArticleController {
     @Autowired
     private CmsArticleService cmsArticleService;
 
+
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @RequiresUser
     public Result<String> add(@RequestBody CmsArticle cmsArticle, HttpSession session){
-        System.out.println(JSON.toJSONString(cmsArticle));
         cmsArticle.setType(CmsArticle.Type.ARTICLE);
         cmsArticle.setStatus(CmsArticle.Status.DRAFT);
         cmsArticle.setOpBy((String) session.getAttribute("me"));
@@ -33,6 +33,16 @@ public class ArticleController {
         } else {
             return Result.error("添加文章失败了！");
         }
+    }
+
+    @RequestMapping(value = "/all", method = RequestMethod.GET)
+    @RequiresUser
+    public Result<PageInfo<CmsArticle>> queryPaging(@RequestParam(
+            required = true, defaultValue = "1") Integer pageNum, @RequestParam(
+                    required = true, defaultValue = "10") int pageSize){
+        PageInfo<CmsArticle> pageInfo = cmsArticleService.findByPaging(pageNum, pageSize);
+        System.out.println(JSON.toJSONString(pageInfo));
+        return Result.success(pageInfo);
     }
 
 }

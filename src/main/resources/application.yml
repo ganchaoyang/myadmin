@@ -27,3 +27,8 @@ logging:
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
+pagehelper:
+  helper-dialect: mysql
+  resonable: true
+  support-methods-arguments: true
+  params: count=countSql
