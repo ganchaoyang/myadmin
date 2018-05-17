@@ -16,7 +16,8 @@ public class CmsArticle {
 
     public enum Status{
         DRAFT,      // 草稿
-        PUBLISHED   // 已发布
+        PUBLISHED,  // 已发布
+        DELETED     // 已删除
     }
 
     public enum ContentType{
