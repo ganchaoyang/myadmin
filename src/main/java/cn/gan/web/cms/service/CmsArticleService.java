@@ -9,4 +9,6 @@ public interface CmsArticleService {
 
     PageInfo<CmsArticle> findByPaging(int pageNum, int pageSize);
 
+    CmsArticle findById(String id);
+
 }

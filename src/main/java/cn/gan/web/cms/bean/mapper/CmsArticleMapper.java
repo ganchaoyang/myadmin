@@ -21,4 +21,6 @@ public interface CmsArticleMapper {
     @Select("select * from t_article order by update_time desc")
     List<CmsArticle> findAll();
 
+    @Select("select * from t_article where id = #{id}")
+    CmsArticle findById(String id);
 }

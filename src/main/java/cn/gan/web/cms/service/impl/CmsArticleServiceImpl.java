@@ -34,4 +34,9 @@ public class CmsArticleServiceImpl implements CmsArticleService {
         PageInfo<CmsArticle> result = new PageInfo<>(articles);
         return result;
     }
+
+    @Override
+    public CmsArticle findById(String id) {
+        return cmsArticleMapper.findById(id);
+    }
 }

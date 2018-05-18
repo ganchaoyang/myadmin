@@ -5,8 +5,6 @@ import cn.gan.web.cms.service.CmsArticleService;
 import cn.gan.web.sys.bean.Result;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
-import org.apache.shiro.authz.annotation.RequiresAuthentication;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +41,14 @@ public class ArticleController {
         PageInfo<CmsArticle> pageInfo = cmsArticleService.findByPaging(pageNum, pageSize);
         System.out.println(JSON.toJSONString(pageInfo));
         return Result.success(pageInfo);
+    }
+
+
+    @RequestMapping(value = "/data/{id}", method = RequestMethod.GET)
+    @RequiresUser
+    public Result<CmsArticle> query(@PathVariable("id") String id){
+        CmsArticle article = cmsArticleService.findById(id);
+        return Result.success(article);
     }
 
 }
