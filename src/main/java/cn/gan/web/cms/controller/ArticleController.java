@@ -51,4 +51,15 @@ public class ArticleController {
         return Result.success(article);
     }
 
+    @RequestMapping(value = "/edit", method = RequestMethod.PUT)
+    @RequiresUser
+    public Result<String> edit(@RequestBody CmsArticle article){
+        int res = cmsArticleService.updateIgnoreNull(article);
+        if (res == 1) {
+            return Result.success("更新文章成功！");
+        } else {
+            return Result.error("更新文章失败！");
+        }
+    }
+
 }

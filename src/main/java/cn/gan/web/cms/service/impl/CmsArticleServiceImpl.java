@@ -39,4 +39,9 @@ public class CmsArticleServiceImpl implements CmsArticleService {
     public CmsArticle findById(String id) {
         return cmsArticleMapper.findById(id);
     }
+
+    @Override
+    public int updateIgnoreNull(CmsArticle article) {
+        return cmsArticleMapper.updateIgnoreNull(article);
+    }
 }

@@ -1,6 +1,7 @@
 package cn.gan.web.cms.bean.mapper;
 
 import cn.gan.web.cms.bean.CmsArticle;
+import cn.gan.web.cms.bean.provider.CmsArticleDaoProvider;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.StatementType;
 
@@ -23,4 +24,7 @@ public interface CmsArticleMapper {
 
     @Select("select * from t_article where id = #{id}")
     CmsArticle findById(String id);
+
+    @UpdateProvider(type = CmsArticleDaoProvider.class, method = "updateIgnoreNull")
+    int updateIgnoreNull(@Param("article") CmsArticle article);
 }

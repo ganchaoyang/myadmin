@@ -45,7 +45,7 @@ public class CmsArticle {
     private Mode mode;
 
     // 浏览数
-    private int views;
+    private Integer views;
 
     // 类型，目前有博客
     private Type type;
@@ -94,11 +94,11 @@ public class CmsArticle {
         this.mode = mode;
     }
 
-    public int getViews() {
+    public Integer getViews() {
         return views;
     }
 
-    public void setViews(int views) {
+    public void setViews(Integer views) {
         this.views = views;
     }
 

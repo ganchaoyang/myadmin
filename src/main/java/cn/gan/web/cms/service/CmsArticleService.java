@@ -11,4 +11,6 @@ public interface CmsArticleService {
 
     CmsArticle findById(String id);
 
+    int updateIgnoreNull(CmsArticle article);
+
 }
