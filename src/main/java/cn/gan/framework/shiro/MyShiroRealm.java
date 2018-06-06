@@ -42,10 +42,4 @@ public class MyShiroRealm extends AuthorizingRealm{
                 new SimpleAccount(sysUser, sysUser.getPassword(), getName());
         return simpleAccount;
     }
-
-    public static void main(String[] args) {
-        String salt = UUID.randomUUID().toString().replace("-", "");
-        System.out.println(salt);
-        System.out.println(new Sha256Hash("111111", salt));
-    }
 }
