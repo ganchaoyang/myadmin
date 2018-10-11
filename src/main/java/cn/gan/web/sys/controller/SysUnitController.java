@@ -1,8 +1,8 @@
 package cn.gan.web.sys.controller;
 
-import cn.gan.web.sys.bean.Result;
+import cn.gan.framework.constans.ErrorCode;
+import cn.gan.framework.facade.BaseResponse;
 import cn.gan.web.sys.bean.SysUnit;
-import cn.gan.web.sys.bean.SysUser;
 import cn.gan.web.sys.service.SysUnitService;
 import com.alibaba.fastjson.JSON;
 import org.apache.shiro.authz.annotation.RequiresUser;
@@ -26,48 +26,53 @@ public class SysUnitController {
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     @RequiresUser
-    public Result<List<SysUnit>> findAll(boolean tree){
+    public BaseResponse<List<SysUnit>> findAll(boolean tree){
         logger.debug("find all units, tree is {}", tree);
         List<SysUnit> units = sysUnitService.findAll(tree);
-        return Result.success(units);
+        return BaseResponse.success(units);
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @RequiresUser
-    public Result<String> add(@RequestBody SysUnit unit, HttpSession session){
+    public BaseResponse<String> add(@RequestBody SysUnit unit, HttpSession session){
         logger.debug("add unit:{}", JSON.toJSONString(unit));
-        if (unit.getParentId() != null && unit.getParentId().length()>0){ // 存在父级单位。
+        if (unit.getParentId() != null && unit.getParentId().length()>0){
+            // 存在父级单位。
             SysUnit parentUnit = sysUnitService.findById(unit.getParentId());
             if (parentUnit == null){
-                return Result.error("父级单位不存在！");
+                return BaseResponse.error(ErrorCode.PARAMS_ERROR, "父级单位不存在！");
             }
         }
         // 设置操作人。
         unit.setOpBy((String) session.getAttribute("me"));
-        if (sysUnitService.addUnit(unit) == 1)
-            return Result.success("添加单位成功！");
-        return Result.error("未知错误");
+        if (sysUnitService.addUnit(unit) == 1) {
+            return BaseResponse.success("操作成功！");
+        }
+        return BaseResponse.error(ErrorCode.SYSTEM_ERROR);
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.PUT)
     @RequiresUser
-    public Result<String> edit(@RequestBody SysUnit unit, HttpSession session){
+    public BaseResponse<String> edit(@RequestBody SysUnit unit, HttpSession session){
         logger.debug("edit unit id is {}, name is {}", unit.getId(), unit.getName()==null?"":unit.getName());
-        if (!sysUnitService.isExistById(unit.getId()))
-            return Result.error("该单位不存在！");
+        if (!sysUnitService.isExistById(unit.getId())) {
+            return BaseResponse.error(ErrorCode.PARAMS_ERROR, "该单位不存在！");
+        }
         unit.setUpdateTime(new Date());
         unit.setOpBy((String) session.getAttribute("me"));
         sysUnitService.updateIgnoreNull(unit);
-        return Result.success("修改成功！");
+        return BaseResponse.success("操作成功！");
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
     @RequiresUser
-    public Result<String> delete(@PathVariable("id") String id){
+    public BaseResponse<String> delete(@PathVariable("id") String id){
         // 删除一个单位，会将其所有的子单位都删除干净。
         // 首先取出该单位。
         SysUnit unit = sysUnitService.findById(id);
-        if (unit == null) return Result.error("该单位不存在！");
+        if (unit == null) {
+            return BaseResponse.error(ErrorCode.PARAMS_ERROR, "该单位不存在！");
+        }
         // 删除该单位及其子单位。
         sysUnitService.deleteWithAllChildren(unit);
         // 如果有父级单位的话，取出其父级单位。
@@ -79,6 +84,6 @@ public class SysUnitController {
                 sysUnitService.updateIgnoreNull(parent);
             }
         }
-        return Result.success("删除成功！");
+        return BaseResponse.success("删除成功！");
     }
 }

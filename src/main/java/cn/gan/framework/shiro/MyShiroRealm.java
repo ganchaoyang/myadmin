@@ -1,5 +1,7 @@
 package cn.gan.framework.shiro;
 
+import cn.gan.framework.jwt.JwtToken;
+import cn.gan.framework.jwt.JwtUtil;
 import cn.gan.web.sys.bean.SysUser;
 import cn.gan.web.sys.service.SysUserService;
 import com.alibaba.fastjson.JSON;
@@ -25,21 +27,34 @@ public class MyShiroRealm extends AuthorizingRealm{
         return authorizationInfo;
     }
 
+    /**
+     * 大坑！，必须重写此方法，不然Shiro会报错
+     */
+    @Override
+    public boolean supports(AuthenticationToken token) {
+        return token instanceof JwtToken;
+    }
+
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken)
             throws AuthenticationException {
-        // 获取用户输入的账号。
-        String username = (String) authenticationToken.getPrincipal();
+        String jwtToken = (String) authenticationToken.getCredentials();
+        String username = JwtUtil.getUsername(jwtToken);
+        if (null == username) {
+            throw new AuthenticationException("错误的登录凭证！");
+        }
         // 从数据库中获取该用户。
         SysUser sysUser = sysUserService.findByLoginName(username, true);
+        if (null == sysUser) {
+            throw new AuthenticationException("用户不存在！");
+        }
+        if (!JwtUtil.verify(jwtToken, username, sysUser.getPassword())) {
+            throw new AuthenticationException("账号或密码错误！");
+        }
         // 查询该用户的所有权限。
         sysUser.setPerms(sysUserService.findPermsOfUser(sysUser.getId(), false));
-        System.out.println(JSON.toJSONString(sysUser));
-        // 在实现角色模块之前，此处先这么处理。
-        if (sysUser == null)
-            throw new UnknownAccountException();
         SimpleAccount simpleAccount =
-                new SimpleAccount(sysUser, sysUser.getPassword(), getName());
+                new SimpleAccount(jwtToken, jwtToken, getName());
         return simpleAccount;
     }
 }

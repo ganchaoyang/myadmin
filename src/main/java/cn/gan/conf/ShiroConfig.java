@@ -25,11 +25,11 @@ public class ShiroConfig {
         ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
         shiroFilter.setSecurityManager(securityManager);
         Map<String , Filter> customFilters = new LinkedHashMap<>();
-        customFilters.put("authc", new CustomShiroFilter());
+        customFilters.put("ajaxAuthc", new CustomShiroFilter());
         shiroFilter.setFilters(customFilters);
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
         filterChainDefinitionMap.put("/user/login", "anon");
-        filterChainDefinitionMap.put("/**", "authc");
+        filterChainDefinitionMap.put("/**", "ajaxAuthc");
         shiroFilter.setFilterChainDefinitionMap(filterChainDefinitionMap);
         shiroFilter.setLoginUrl("/user/login");
         return shiroFilter;
