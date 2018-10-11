@@ -16,6 +16,8 @@ public enum ErrorCode {
     PARAMS_ERROR(10004, "参数错误！"),
     // 非法操作
     ILLEGAL_OPERATION(10005, "非法操作！"),
+    // 无权限操作
+    NO_PERMISSION(10006, "无操作权限！"),
     // 认证过期了。
     AUTHENTICATION_EXPIRED(40001, "认证过期！"),
     LOGIN_FAILED(40002, "登录错误，用户名/密码错误！");

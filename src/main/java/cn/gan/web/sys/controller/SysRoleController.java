@@ -4,6 +4,7 @@ import cn.gan.framework.constans.ErrorCode;
 import cn.gan.framework.facade.BaseResponse;
 import cn.gan.web.sys.bean.SysRole;
 import cn.gan.web.sys.service.SysRoleService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,21 +20,21 @@ public class SysRoleController {
     private SysRoleService sysRoleService;
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    @RequiresUser
+    @RequiresPermissions("sys.role.view")
     public BaseResponse<List<SysRole>> data(){
         List<SysRole> roles = sysRoleService.findAll();
         return BaseResponse.success(roles);
     }
 
     @RequestMapping(value = "/data/{id}", method = RequestMethod.GET)
-    @RequiresUser
+    @RequiresPermissions("sys.role.view")
     public BaseResponse<SysRole> data(@PathVariable("id") String id){
         SysRole role = sysRoleService.findById(id, true, false);
         return BaseResponse.success(role);
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    @RequiresUser
+    @RequiresPermissions("sys.role.add")
     public BaseResponse<String> add(@RequestBody SysRole sysRole, HttpSession session){
         sysRole.setOpBy((String) session.getAttribute("me"));
         // 判断这个角色的名称是否存在。
@@ -48,7 +49,7 @@ public class SysRoleController {
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
-    @RequiresUser
+    @RequiresPermissions("sys.role.del")
     public BaseResponse<String> delete(@PathVariable("id")String id){
         // 删除角色。
         sysRoleService.deleteById(id);
@@ -57,7 +58,7 @@ public class SysRoleController {
 
 
     @RequestMapping(value = "/edit", method = RequestMethod.PUT)
-    @RequiresUser
+    @RequiresPermissions("sys.role.edit")
     public BaseResponse<String> edit(@RequestBody SysRole sysRole){
         // 首先判断该角色是否存在。
         SysRole toBeUpdate = sysRoleService.findById(sysRole.getId(), false, false);

@@ -5,6 +5,7 @@ import cn.gan.framework.facade.BaseResponse;
 import cn.gan.web.sys.bean.SysPerm;
 import cn.gan.web.sys.service.SysPermService;
 import com.alibaba.fastjson.JSON;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,7 @@ public class SysPermController {
     private SysPermService sysPermService;
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
+    @RequiresPermissions("sys.perm.view")
     public BaseResponse<List<SysPerm>> findAll(boolean tree){
         logger.debug("find all units, tree is {}", tree);
         List<SysPerm> perms = sysPermService.findAll(tree);
@@ -32,7 +34,7 @@ public class SysPermController {
 
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    @RequiresUser
+    @RequiresPermissions("sys.perm.add")
     public BaseResponse<String> add(@RequestBody SysPerm sysPerm, HttpSession session){
         logger.debug("add perm, {}", JSON.toJSONString(sysPerm));
         if (sysPermService.countByName(sysPerm.getName()) > 0) {
@@ -56,7 +58,7 @@ public class SysPermController {
 
 
     @RequestMapping(value = "/edit", method = RequestMethod.PUT)
-    @RequiresUser
+    @RequiresPermissions("sys.perm.edit")
     public BaseResponse<String> edit(@RequestBody SysPerm sysPerm, HttpSession session){
         logger.debug("update perm {}", JSON.toJSONString(sysPerm));
         // 先查询出旧的权限。
@@ -83,7 +85,7 @@ public class SysPermController {
 
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
-    @RequiresUser
+    @RequiresPermissions("sys.perm.del")
     public BaseResponse<String> delete(@PathVariable("id") String id){
         logger.debug("delete perm,the id is {}", id);
         // 首先查询这个权限。

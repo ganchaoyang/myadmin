@@ -8,6 +8,7 @@ import cn.gan.web.sys.service.SysUnitService;
 import cn.gan.web.sys.service.SysUserService;
 import com.alibaba.fastjson.JSON;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresUser;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.apache.shiro.subject.Subject;
@@ -80,7 +81,7 @@ public class SysUserController {
 
     // 查询所有用户。
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    @RequiresUser
+    @RequiresPermissions("sys.user.view")
     public BaseResponse<List<SysUser>> data(){
         // TODO 加上分页。
         List<SysUser> users = sysUserService.findAll();
@@ -88,7 +89,7 @@ public class SysUserController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    @RequiresUser
+    @RequiresPermissions("sys.user.add")
     public BaseResponse<String> add(@RequestBody SysUser sysUser, HttpSession session){
         logger.debug("login user is : {}, create user : {}",session.getAttribute("me"), JSON.toJSONString(sysUser));
         if (sysUser.getUnitId() == null || !sysUnitService.isExistById(sysUser.getUnitId())) {
@@ -99,7 +100,7 @@ public class SysUserController {
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
-    @RequiresUser
+    @RequiresPermissions("sys.user.del")
     public BaseResponse<String> delete(@PathVariable("id") String id, HttpSession session){
         logger.debug("delete user : {}", id);
         if (id.equals(session.getAttribute("me"))) {
@@ -110,7 +111,7 @@ public class SysUserController {
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.PUT)
-    @RequiresUser
+    @RequiresPermissions("sys.user.edit")
     public BaseResponse<String> edit(@RequestBody SysUser sysUser, HttpSession session){
         // 判断这个用户是否存在。
         logger.debug("update user : {}", JSON.toJSONString(sysUser));

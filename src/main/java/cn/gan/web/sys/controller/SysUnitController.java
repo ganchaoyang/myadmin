@@ -5,6 +5,7 @@ import cn.gan.framework.facade.BaseResponse;
 import cn.gan.web.sys.bean.SysUnit;
 import cn.gan.web.sys.service.SysUnitService;
 import com.alibaba.fastjson.JSON;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +26,7 @@ public class SysUnitController {
     private SysUnitService sysUnitService;
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    @RequiresUser
+    @RequiresPermissions("sys.unit.view")
     public BaseResponse<List<SysUnit>> findAll(boolean tree){
         logger.debug("find all units, tree is {}", tree);
         List<SysUnit> units = sysUnitService.findAll(tree);
@@ -33,7 +34,7 @@ public class SysUnitController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    @RequiresUser
+    @RequiresPermissions("sys.unit.add")
     public BaseResponse<String> add(@RequestBody SysUnit unit, HttpSession session){
         logger.debug("add unit:{}", JSON.toJSONString(unit));
         if (unit.getParentId() != null && unit.getParentId().length()>0){
@@ -52,7 +53,7 @@ public class SysUnitController {
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.PUT)
-    @RequiresUser
+    @RequiresPermissions("sys.unit.edit")
     public BaseResponse<String> edit(@RequestBody SysUnit unit, HttpSession session){
         logger.debug("edit unit id is {}, name is {}", unit.getId(), unit.getName()==null?"":unit.getName());
         if (!sysUnitService.isExistById(unit.getId())) {
@@ -65,7 +66,7 @@ public class SysUnitController {
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
-    @RequiresUser
+    @RequiresPermissions("sys.unit.del")
     public BaseResponse<String> delete(@PathVariable("id") String id){
         // 删除一个单位，会将其所有的子单位都删除干净。
         // 首先取出该单位。

@@ -2,6 +2,7 @@ package cn.gan.framework.shiro;
 
 import cn.gan.framework.jwt.JwtToken;
 import cn.gan.framework.jwt.JwtUtil;
+import cn.gan.framework.util.CollectionsUtil;
 import cn.gan.web.sys.bean.SysUser;
 import cn.gan.web.sys.service.SysUserService;
 import com.alibaba.fastjson.JSON;
@@ -15,6 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.UUID;
 
+/**
+ * @author ganchaoyang
+ */
 public class MyShiroRealm extends AuthorizingRealm{
 
     @Autowired
@@ -23,7 +27,24 @@ public class MyShiroRealm extends AuthorizingRealm{
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-        // TODO 需要获取用户权限。
+        // 获取用户登录名
+        String loginName = JwtUtil.getUsername((String) principalCollection.getPrimaryPrincipal());
+        if (null == loginName) {
+            return authorizationInfo;
+        }
+        // 查询用户
+        SysUser sysUser = sysUserService.findByLoginName(loginName, true);
+        if (null == sysUser) {
+            return authorizationInfo;
+        }
+        // 查询权限
+        sysUser.setPerms(sysUserService.findPermsOfUser(sysUser.getId(), false));
+        if (CollectionsUtil.isNotNullOrEmpty(sysUser.getRoles())) {
+            sysUser.getRoles().forEach(one -> authorizationInfo.addRole(one.getNote()));
+        }
+        if (CollectionsUtil.isNotNullOrEmpty(sysUser.getPerms())) {
+            sysUser.getPerms().forEach(one -> authorizationInfo.addStringPermission(one.getCode()));
+        }
         return authorizationInfo;
     }
 

@@ -6,6 +6,7 @@ import cn.gan.web.cms.bean.CmsArticle;
 import cn.gan.web.cms.service.CmsArticleService;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class ArticleController {
 
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    @RequiresUser
+    @RequiresPermissions("cms.article.add")
     public BaseResponse<String> add(@RequestBody CmsArticle cmsArticle, HttpSession session){
         cmsArticle.setType(CmsArticle.Type.ARTICLE);
         cmsArticle.setStatus(CmsArticle.Status.DRAFT);
@@ -36,6 +37,7 @@ public class ArticleController {
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     @RequiresUser
+    @RequiresPermissions("cms.article.view")
     public BaseResponse<PageInfo<CmsArticle>> queryPaging(@RequestParam(
             required = true, defaultValue = "1") Integer pageNum, @RequestParam(
                     required = true, defaultValue = "10") int pageSize){
@@ -47,13 +49,14 @@ public class ArticleController {
 
     @RequestMapping(value = "/data/{id}", method = RequestMethod.GET)
     @RequiresUser
+    @RequiresPermissions("cms.article.view")
     public BaseResponse<CmsArticle> query(@PathVariable("id") String id){
         CmsArticle article = cmsArticleService.findById(id);
         return BaseResponse.success(article);
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.PUT)
-    @RequiresUser
+    @RequiresPermissions("cms.article.edit")
     public BaseResponse<String> edit(@RequestBody CmsArticle article){
         int res = cmsArticleService.updateIgnoreNull(article);
         if (res == 1) {
